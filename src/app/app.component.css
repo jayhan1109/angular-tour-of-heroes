@@ -5,7 +5,8 @@ h1 {
 nav a {
   padding: 1rem;
   text-decoration: none;
-  margin-top: 10px;
+  margin-top: 2rem;
+  margin-right: 2rem;
   display: inline-block;
   background-color: #e8e8e8;
   color: #3d3d3d;
@@ -17,5 +18,21 @@ nav a:hover {
   background-color: #42545C;
 }
 nav a.active {
-  background-color: black;
+  background-color: #42545C;
+  color: white;
+}
+
+.container {
+  display: flex;
+  column-gap: 30px;
+}
+
+.box1 {
+  flex: 1;
+  display: inline-block;
+}
+
+.box2 {
+  flex: 1;
+  display: inline-block;
 }

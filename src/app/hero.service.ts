@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HEROES} from './mock-heroes';
-import {catchError, of, tap} from 'rxjs';
+import {catchError, of, Subject, tap} from 'rxjs';
 import {MessageService} from './message.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Hero} from './hero.interface';
@@ -13,6 +12,7 @@ export class HeroService {
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
+  searchDisabled = new Subject<boolean>();
 
   constructor(private http: HttpClient, private messageService: MessageService) {
   }
@@ -48,7 +48,7 @@ export class HeroService {
 
   addHero(hero: Hero) {
     return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
-      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
+      tap((newHero: Hero) => this.log(`added hero with id=${newHero.id}`)),
       catchError(this.handleError<Hero>('addHero'))
     );
   }

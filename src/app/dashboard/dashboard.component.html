@@ -1,8 +1,13 @@
-<h2>Top Heroes</h2>
-<div class="heroes-menu">
-  <a *ngFor="let hero of heroes" routerLink="/detail/{{hero.id}}">
-    {{hero.name}}
-  </a>
-</div>
+<div class="container">
+  <h2>Top Heroes</h2>
+  <div class="heroes-menu">
+    <a *ngFor="let hero of heroes" routerLink="/detail/{{hero.id}}">
+      {{hero.name}}
+    </a>
+    <h3 class="no-top-hero" *ngIf="heroes.length === 0">
+      Top Heroes Not Exist
+    </h3>
+  </div>
 
-<app-hero-search></app-hero-search>
+  <app-hero-search></app-hero-search>
+</div>

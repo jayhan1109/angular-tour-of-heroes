@@ -11,6 +11,7 @@ import {HeroService} from '../hero.service';
 export class HeroSearchComponent implements OnInit {
   heroes$!: Observable<Hero[]>;
   private searchTerms = new Subject<string>();
+  disabled = true
 
   constructor(private heroService: HeroService) {
   }
@@ -25,6 +26,8 @@ export class HeroSearchComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((term: string) => this.heroService.searchHeroes(term)),
     )
+    this.heroService.searchDisabled.subscribe(heroZero => {
+      this.disabled = heroZero;
+    });
   }
-
 }

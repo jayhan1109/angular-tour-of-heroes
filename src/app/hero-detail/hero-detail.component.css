@@ -1,0 +1,38 @@
+h2 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-info {
+  font-size: 1.7rem;
+  width: 50%;
+  background: #42545C;
+  color: white;
+  padding: 1rem;
+}
+
+.hero-name {
+  margin-left: 1rem;
+  padding: .5rem;
+  margin-top: 1rem;
+  max-width: 50%;
+}
+
+.hero-name:focus {
+  outline: #336699 auto 1px;
+}
+
+.primary {
+  margin-top: 1.5rem;
+}
+
+.warning {
+  margin-top: 2rem;
+}
