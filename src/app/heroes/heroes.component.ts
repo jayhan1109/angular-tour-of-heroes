@@ -24,7 +24,7 @@ export class HeroesComponent implements OnInit {
     });
   }
 
-  async add(name: string) {
+  add(name: string) {
     name = name.trim();
     if (!name) {
       return;
@@ -35,8 +35,8 @@ export class HeroesComponent implements OnInit {
       return;
     }
 
-    await this.heroService.addHero({ name } as Hero);
-    this.heroes.push({id: 3, name});
+    // await this.heroService.addHero({ name } as Hero);
+    // this.heroes.push({id: 3, name});
 
     this.heroService.addHero({name} as Hero)
       .subscribe(hero => {
