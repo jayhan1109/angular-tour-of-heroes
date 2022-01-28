@@ -3,6 +3,7 @@ import {catchError, of, Subject, tap} from 'rxjs';
 import {MessageService} from './message.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Hero} from './hero.interface';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,12 @@ export class HeroService {
   };
   searchDisabled = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private messageService: MessageService) {
+  heroRef: AngularFirestoreCollection<Hero>;
+
+  constructor(private http: HttpClient,
+              private messageService: MessageService,
+              private db: AngularFirestore) {
+    this.heroRef = db.collection(this.heroesUrl);
   }
 
   private log(message: string) {
@@ -47,6 +53,9 @@ export class HeroService {
   }
 
   addHero(hero: Hero) {
+    // const val = await this.heroRef.add(hero);
+    // console.log(val);
+    // return val;
     return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
       tap((newHero: Hero) => this.log(`added hero with id=${newHero.id}`)),
       catchError(this.handleError<Hero>('addHero'))

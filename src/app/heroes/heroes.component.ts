@@ -10,7 +10,8 @@ import {HeroService} from '../hero.service';
 export class HeroesComponent implements OnInit {
   heroes: Hero[] = [];
 
-  constructor(private heroService: HeroService) {}
+  constructor(private heroService: HeroService) {
+  }
 
   ngOnInit(): void {
     this.getHeroes();
@@ -23,18 +24,23 @@ export class HeroesComponent implements OnInit {
     });
   }
 
-  add(name: string) {
+  async add(name: string) {
     name = name.trim();
-    if (!name) { return; }
+    if (!name) {
+      return;
+    }
 
     if (this.heroes.find(hero => hero.name.toLowerCase() === name.toLowerCase())) {
       alert(`${name} is already exist.`);
       return;
     }
 
-    this.heroService.addHero({ name } as Hero)
+    await this.heroService.addHero({ name } as Hero);
+    this.heroes.push({id: 3, name});
+
+    this.heroService.addHero({name} as Hero)
       .subscribe(hero => {
-        this.heroes.push(hero);
+        this.heroes.push({id: 3, name});
       });
   }
 

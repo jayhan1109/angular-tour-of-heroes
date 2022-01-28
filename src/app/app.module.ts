@@ -13,6 +13,9 @@ import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {InMemoryDataService} from './in-memory-data.service';
 import { HeroSearchComponent } from './hero-search/hero-search.component';
 import { HeroesDirective } from './heroes/heroes.directive';
+import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import {AngularFireModule} from '@angular/fire/compat';
+import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,8 @@ import { HeroesDirective } from './heroes/heroes.directive';
     FormsModule,
     AppRoutingModule,
     HttpClientModule,
+    AngularFirestoreModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, {dataEncapsulation: false}
     )
