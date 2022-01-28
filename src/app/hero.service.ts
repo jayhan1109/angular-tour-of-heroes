@@ -9,7 +9,7 @@ import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat
   providedIn: 'root'
 })
 export class HeroService {
-  private heroesUrl = 'api/heroes';
+  private heroesUrl = 'heroes';
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   };
@@ -17,10 +17,21 @@ export class HeroService {
 
   heroRef: AngularFirestoreCollection<Hero>;
 
+  heroes: Hero[] = [];
+
   constructor(private http: HttpClient,
               private messageService: MessageService,
               private db: AngularFirestore) {
     this.heroRef = db.collection(this.heroesUrl);
+    this.getHeroes().subscribe(heroes => {
+      this.heroes = heroes.map(hero => {
+        return {
+          id: hero.payload.doc.id,
+          name: hero.payload.doc.data().name
+        }
+      });
+      this.searchDisabled.next(heroes.length === 0);
+    });
   }
 
   private log(message: string) {
@@ -28,57 +39,36 @@ export class HeroService {
   }
 
   getHeroes() {
-    return this.http.get<Hero[]>(this.heroesUrl)
-      .pipe(
-        tap(_ => this.log('fetched heroes')),
-        catchError(this.handleError<Hero[]>('getHeroes', []))
-      );
+    this.log('Fetched all heroes');
+    return this.heroRef.snapshotChanges();
   }
 
-  getHero(id: number) {
-    const url = `${this.heroesUrl}/${id}`;
-    return this.http.get<Hero>(url)
-      .pipe(
-        tap(_ => this.log(`fetched hero id=${id}`)),
-        catchError(this.handleError<Hero>(`getHero id=${id}`))
-      );
+  getHero(id: string) {
+    this.log(`Fetched hero id=${id}`);
+    return this.heroRef.doc(id).get();
   }
 
   updateHero(hero: Hero) {
-    return this.http.put(this.heroesUrl, hero, this.httpOptions)
-      .pipe(
-        tap(_ => this.log(`fetched hero id=${hero.id}`)),
-        catchError(this.handleError<any>('updateHero'))
-      );
+    this.heroRef.doc(hero.id).update({name: hero.name});
+    this.log(`Updated hero id=${hero.id}`);
   }
 
-  addHero(hero: Hero) {
-    // const val = await this.heroRef.add(hero);
-    // console.log(val);
-    // return val;
-    return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
-      tap((newHero: Hero) => this.log(`added hero with id=${newHero.id}`)),
-      catchError(this.handleError<Hero>('addHero'))
-    );
+  async addHero(hero: Hero) {
+    const doc = await this.heroRef.add(hero);
+    this.log(`Added hero name=${hero.name}`);
+    return doc.id
   }
-  deleteHero(id: number) {
-    const url = `${this.heroesUrl}/${id}`;
-    return this.http.delete<Hero>(url, this.httpOptions).pipe(
-      tap(_ => this.log(`deleted hero id=${id}`)),
-      catchError(this.handleError<Hero>('deleteHero'))
-    );
+
+  deleteHero(id: string) {
+    this.log(`Deleted hero id=${id}`);
+    this.heroRef.doc(id).delete();
   }
 
   searchHeroes(term: string) {
     if (!term.trim()) {
       return of([]);
     }
-    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
-      tap(x => x.length ?
-        this.log(`found heroes matching "${term}"`) :
-        this.log(`no heroes matching "${term}"`)),
-      catchError(this.handleError<Hero[]>('searchHeroes', []))
-    );
+    return of(this.heroes.filter(hero => hero.name.includes(term)));
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

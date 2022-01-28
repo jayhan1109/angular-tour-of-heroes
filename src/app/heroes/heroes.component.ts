@@ -19,12 +19,17 @@ export class HeroesComponent implements OnInit {
 
   getHeroes() {
     this.heroService.getHeroes().subscribe(heroes => {
-      this.heroes = heroes;
+      this.heroes = heroes.map(hero => {
+        return {
+          id: hero.payload.doc.id,
+          name: hero.payload.doc.data().name
+        }
+      });
       this.heroService.searchDisabled.next(heroes.length === 0);
     });
   }
 
-  add(name: string) {
+  async add(name: string) {
     name = name.trim();
     if (!name) {
       return;
@@ -35,18 +40,13 @@ export class HeroesComponent implements OnInit {
       return;
     }
 
-    // await this.heroService.addHero({ name } as Hero);
-    // this.heroes.push({id: 3, name});
-
-    this.heroService.addHero({name} as Hero)
-      .subscribe(hero => {
-        this.heroes.push({id: 3, name});
-      });
+    const docId = await this.heroService.addHero({name} as Hero)
+    this.heroes.push({id: docId, name})
   }
 
   delete(hero: Hero) {
     this.heroes = this.heroes.filter(h => h !== hero);
-    this.heroService.deleteHero(hero.id).subscribe();
+    this.heroService.deleteHero(hero.id);
     this.heroService.searchDisabled.next(this.heroes.length === 0);
   }
 }

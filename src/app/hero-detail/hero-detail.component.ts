@@ -24,9 +24,10 @@ export class HeroDetailComponent implements OnInit {
   }
 
   getHero() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.heroService.getHero(id)
-      .subscribe(hero => this.hero = hero);
+    const id = this.route.snapshot.paramMap.get('id')!;
+    this.heroService.getHero(id).subscribe(hero => {
+      this.hero = {id, name: hero.data()?.name!}
+    })
   }
 
   goBack() {
@@ -35,8 +36,8 @@ export class HeroDetailComponent implements OnInit {
 
   save() {
     if(this.hero) {
-      this.heroService.updateHero(this.hero)
-        .subscribe(() => this.goBack());
+      this.heroService.updateHero(this.hero);
+      alert('Hero name is updated')
     }
   }
 

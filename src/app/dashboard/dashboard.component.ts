@@ -19,7 +19,12 @@ export class DashboardComponent implements OnInit {
   getHeroes() {
     this.heroService.getHeroes()
       .subscribe(heroes => {
-        this.heroes = heroes.slice(1,5);
+        this.heroes = heroes.map(hero => {
+          return {
+            id: hero.payload.doc.id,
+            name: hero.payload.doc.data().name
+          }
+        }).slice(1, 5);
         this.heroService.searchDisabled.next(heroes.length === 0);
       });
 
