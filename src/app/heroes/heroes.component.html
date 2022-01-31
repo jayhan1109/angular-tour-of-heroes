@@ -16,6 +16,6 @@
   <label for="new-hero">Hero name</label>
   <input appHeroes id="new-hero" #heroName [heroName]="heroName" (addHeroHandler)="add($event)"/>
   <button class="add-button btn primary" (click)="add(heroName.value); heroName.value=''">
-    Add hero
+    Add Hero
   </button>
 </div>

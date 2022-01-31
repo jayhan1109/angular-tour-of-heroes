@@ -1,4 +1,7 @@
-/* AppComponent에 적용되는 CSS 스타일 */
+* {
+  word-wrap: break-word;
+}
+
 h1 {
   margin-bottom: 0;
 }
@@ -30,6 +33,8 @@ nav a.active {
 .box1 {
   flex: 1;
   display: inline-block;
+  border-right: 1px solid #42545C;
+  padding-right: 4rem;
 }
 
 .box2 {

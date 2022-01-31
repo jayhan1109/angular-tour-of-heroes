@@ -2,9 +2,9 @@
   <h2>{{hero.name | uppercase}}</h2>
   <div class="hero-info hero-id"><span class="id-box">ID </span>{{hero.id}}</div>
   <div class="hero-info">
-    <label class="id-box" for="hero-name">Hero Name</label>
+    <label class="id-box" for="hero-name">Hero name</label>
     <input class="hero-name" id="hero-name" [(ngModel)]="hero.name" placeholder="name">
   </div>
   <button class="btn primary" (click)="save()">Save</button>
 </div>
-<button class="btn warning" (click)="goBack()">Go Back</button>
+<button class="btn primary" (click)="goBack()">Go Back</button>

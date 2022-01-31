@@ -16,6 +16,7 @@ h2 {
   background: #42545C;
   color: white;
   padding: 1rem;
+  word-wrap: break-word;
 }
 
 .hero-name {
